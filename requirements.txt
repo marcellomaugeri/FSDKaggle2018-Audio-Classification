@@ -1,0 +1,5 @@
+pytorch
+librosa
+scikit-learn
+pandas
+torchaudio
