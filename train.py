@@ -13,6 +13,9 @@ from dataset import SoundDS
 train_df = pd.read_csv("./dataset/train_post_competition.csv") 
 #adds the column containg the file path to the dataframe
 train_df['file_path'] = './dataset/audio_train/' + train_df['fname']
+#dataframes for info
+info_training_df = pd.DataFrame(columns = ['accuracy', 'fscore'])
+info_testing_df = pd.DataFrame(columns = ['accuracy', 'fscore'])
 
 #translates the class labels in numbers
 labels = train_df['label'].unique()
@@ -137,6 +140,8 @@ def training(model, train_dl, num_epochs):
         precision = tp / (tp + fp )
         recall = tp / (tp + fn)
         f1 = 2 * (precision*recall) / (precision + recall)
+        info_training_df.append(acc, f1)
+        info_training_df.to_csv('info_training.csv')
         print(f'Epoch: {epoch}, Loss: {avg_loss:.2f}, Accuracy: {acc:.2f}, F1-Score: {f1:.2f}')
 
 num_epochs=60
@@ -177,6 +182,8 @@ def test (model, test_dl):
     precision = tp / (tp + fp )
     recall = tp / (tp + fn)
     f1 = 2* (precision*recall) / (precision + recall)
+    info_test_df.append(acc, f1)
+    info_test_df.to_csv('info_test.csv')
     print(f'Accuracy: {acc:.2f}, Total items: {total_prediction}, F1-Score: {f1:.2f}')
 
 # Run testing
